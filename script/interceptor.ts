@@ -53,7 +53,7 @@ class XHRInterceptor {
 
     const self = this;
 
-    XMLHttpRequest.prototype.send = function () {
+    XMLHttpRequest.prototype.send = function (data: any) {
 
       const parsedURL = new URL(this.originalURL);
 
@@ -64,17 +64,36 @@ class XHRInterceptor {
 
         const matches = parsedURL.pathname.match(m.expression);
 
+
         return (
+          matches &&
           matches.length > 0 &&
           matches[0].length == parsedURL.pathname.length
         );
       });
 
-      const payload = { response: 'r', statusCode: 200 };
+      const payload = { response: { result: 'default payload' }, statusCode: 200 };
 
       if (l.length > 0) {
-        payload.statusCode = l[0].statusCode;
-        payload.response = l[0].response;
+        payload.statusCode = l[0].statusCode || 200;
+        payload.response = l[0].response || { result: 'default payload' };
+      } else {
+        const consoleArgs: any[] = [];
+        let message = `%cURL not handled: %c${this.originalURL}`;
+        if (data) {
+          message += `\n%cData: %c`;
+          message += typeof data == 'string' ? `%s` : `%O`;
+          consoleArgs.push(
+            `font-style: italic; color: red; font-size: 12px`,
+            `font-style: normal; color: green; font-size: 12px;`,
+            data,
+          );
+        }
+        consoleArgs.unshift(
+          `font-style: italic; color: red; font-size: 12px`,
+          `font-style: normal; color: green; font-size: 12px;`,
+        );
+        console.log(message, ...consoleArgs);
       }
 
       if (typeof payload == 'object') {
@@ -92,7 +111,9 @@ class XHRInterceptor {
 (window as any).XHRInterceptor = XHRInterceptor;
 
 class Matcher {
-  expression: RegExp | string;
-  response: any;
-  statusCode: number;
+  constructor(
+    public expression: RegExp | string,
+    public response: any,
+    public statusCode: number,
+  ) { }
 }
