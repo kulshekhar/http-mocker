@@ -1,7 +1,10 @@
 language: go
 
+sudo: required
+
 before_install:
   - wget https://gist.github.com/kulshekhar/cd0bd02a87d18a2cbb3bce6128b3187d/raw/0a77d6c0f555de47b5b47000533543b37d28bf57/release-http-mocker.py
+  - pip install requests
 
 script:
   - go build -o /tmp/http-mocker-ubuntu
