@@ -8,4 +8,4 @@ before_install:
 
 script:
   - go build -o /tmp/http-mocker-ubuntu
-  - ghk3=/tmp/http-mocker-ubuntu python release-http-mocker.py
+  - if [ $TRAVIS_BRANCH = "master" ]; then ghk3=/tmp/http-mocker-ubuntu python release-http-mocker.py; fi
