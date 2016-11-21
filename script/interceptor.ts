@@ -6,6 +6,8 @@ class XHRInterceptor {
 
   private matchers: Matcher[] = [];
 
+  public throwOnNoMatch: boolean = true;
+
   constructor(private targetURL: string = 'http://localhost:18000/') { }
 
   match(matcher: Matcher) {
@@ -16,14 +18,28 @@ class XHRInterceptor {
     this.matchers.push(...matchers);
   }
 
+  clear() {
+    this.matchers = [];
+  }
+
   restore() {
-    XMLHttpRequest.prototype.open = XHRInterceptor.xOpen;
-    XMLHttpRequest.prototype.send = XHRInterceptor.xSend;
+    XMLHttpRequest.prototype.open = XHRInterceptor.xOpen
+      ? XHRInterceptor.xOpen
+      : XMLHttpRequest.prototype.open;
+
+    XMLHttpRequest.prototype.send = XHRInterceptor.xSend
+      ? XHRInterceptor.xSend
+      : XMLHttpRequest.prototype.send;
   }
 
   static restore() {
-    XMLHttpRequest.prototype.open = XHRInterceptor.xOpen;
-    XMLHttpRequest.prototype.send = XHRInterceptor.xSend;
+    XMLHttpRequest.prototype.open = XHRInterceptor.xOpen
+      ? XHRInterceptor.xOpen
+      : XMLHttpRequest.prototype.open;
+
+    XMLHttpRequest.prototype.send = XHRInterceptor.xSend
+      ? XHRInterceptor.xSend
+      : XMLHttpRequest.prototype.send;
   }
 
   intercept() {
@@ -94,6 +110,10 @@ class XHRInterceptor {
           `font-style: normal; color: green; font-size: 12px;`,
         );
         console.log(message, ...consoleArgs);
+
+        if (self.throwOnNoMatch) {
+          throw `URL not handled: ${this.originalURL}\nData: ${data}`;
+        }
       }
 
       if (typeof payload == 'object') {
