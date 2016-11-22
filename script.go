@@ -84,7 +84,7 @@ func scriptInterceptorTs() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "script/interceptor.ts", size: 3575, mode: os.FileMode(420), modTime: time.Unix(1479728696, 0)}
+	info := bindataFileInfo{name: "script/interceptor.ts", size: 3575, mode: os.FileMode(420), modTime: time.Unix(1479841470, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -104,7 +104,7 @@ func scriptScriptMinJs() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "script/script.min.js", size: 2298, mode: os.FileMode(420), modTime: time.Unix(1479728698, 0)}
+	info := bindataFileInfo{name: "script/script.min.js", size: 2298, mode: os.FileMode(420), modTime: time.Unix(1479841473, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
